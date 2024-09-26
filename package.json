@@ -1,0 +1,13 @@
+{
+  "name": "week-5-assignment-damola7",
+  "version": "1.0.0",
+  "description": "This demonstrates the cconnection of MySQL database and Node.js to create a simple API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
