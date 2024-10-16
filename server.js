@@ -40,10 +40,11 @@ app.set('views', __dirname + '/views');
 
 // Data is a file found in the Views folder 
 // QUESTION 1
-app.get('/data', (req, res) => {
-    db.query ('SELECT patient_id, first_name, last_name, date_of_birth FROM patients',(err, results) => {
+app.get('/patients', (req, res) => {
+    const patients = 'SELECT patient_id, first_name, last_name, date_of_birth FROM patients';
+    db.query (patients, (err, results) => {
         if (err) {
-          res.status(500).send({ error: 'Error retrieving patients'});
+            return res.status(500).send({ error: 'Error retrieving patients'});
         } else {
             res.render('data', {results: results});
         }
@@ -52,9 +53,10 @@ app.get('/data', (req, res) => {
 
 //QUESTION 2
 app.get('/providers', (req, res) => {
-    db.query('SELECT provider_id, first_name, last_name, provider_specialty FROM providers', (err, results) => {
+    const providers = 'SELECT provider_id, first_name, last_name, provider_specialty FROM providers';
+    db.query(providers, (err, results) => {
         if (err) {
-          res.status(500).send({ error: 'Error retrieving providers' });
+            return res.status(500).send({ error: 'Error retrieving providers' });
         } else {
             res.render('providers', { results: results });
         }
@@ -62,10 +64,12 @@ app.get('/providers', (req, res) => {
 });
 
 //QUESTION 3
-app.get('/patients', (req, res) => {
-    db.query ('SELECT first_name FROM patients',(err, results) => {
+app.get('/patients/:first_name', (req, res) => {
+    const firstName = req.params.first_name
+    const sql = 'SELECT first_name, last_name FROM patients WHERE first_name = ?';
+    db.query (sql, [firstName], (err, results) => {
         if (err) {
-          res.status(500).send({ error: 'Error retrieving patients by first name'});
+            return res.status(500).send({ error: 'Error retrieving patients by first name'});
         } else {
             res.render('patients', {results: results});
         }
@@ -73,10 +77,14 @@ app.get('/patients', (req, res) => {
 });
 
 //QUESTION 4
-app.get('/providers-specialty', (req, res) => {
-    db.query('SELECT first_name, last_name, provider_specialty FROM providers', (err, results) => {
+app.get('/providers/:provider_specialty', (req, res) => {
+    const specialty = req.params.provider_specialty
+    console.log('Requested Specialty:', specialty);  // Debugging log
+
+    const sql = 'SELECT first_name, last_name, provider_specialty FROM providers WHERE provider_specialty = ?'
+    db.query(sql, [specialty], (err, results) => {
         if (err) {
-          res.status(500).send({ error: 'Error retrieving providers by specialty' });
+            return res.status(500).send({ error: 'Error retrieving providers by specialty' });
         } else {
             res.render('providers-specialty', { results: results });
         }
